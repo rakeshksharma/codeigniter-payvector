@@ -6,7 +6,13 @@ i m serving a payvector payment gateway library for codeigniter
 step to implement:-
 
 1. download packege.
-2. add libraries files to your site application/libraries/
+2. add libraries files and Thepaymentgateway dir  to your site application/libraries/
+   so your structure will be:-
+   application/libraries/payvector.php
+   application/libraries/ThePaymentGateway/PaymentSystem.php
+   application/libraries/ThePaymentGateway/Common.php
+   application/libraries/ThePaymentGateway/ISOCountries.php
+   application/libraries/ThePaymentGateway/SOAP.php
 3. add below code to your controller where you want to send payment. you can use this function code in any your file 
 where you want to add code. send your card from functions varible
 function stand for sending required values to payvector and getting response.
