@@ -2082,11 +2082,16 @@
 	                        {
 	                        	//getting the valid transaction type document format
 	                        	$sxXmlDocument = $ResponseDocument->$ResponseMethod;
+								
+								$lszErrorMessages = new StringList();
 	                        	
-	                        	$lszErrorMessages = new StringList();
-	                        	
-								$nStatusCode = (int)current($ResponseDocument->$ResponseMethod->$szGatewayOutputXMLPath->StatusCode[0]);
-
+								//$nStatusCode = (int)current($ResponseDocument->$ResponseMethod->$szGatewayOutputXMLPath->StatusCode[0]);
+																
+								//New code 11-3-2014
+								//echo '<pre>';print_r($ResponseDocument->$ResponseMethod); 
+								$nStatusCode = (int)$ResponseDocument->$ResponseMethod->$szGatewayOutputXMLPath->StatusCode[0];
+								$nStatusCode = "{$nStatusCode}"; 
+								//New code 11-3-2014
 								// a status code of 50 means that this entry point is not to be used
 								if ($nStatusCode != 50)
 								{
@@ -2095,7 +2100,12 @@
 
 									if ($ResponseDocument->$ResponseMethod->$szGatewayOutputXMLPath->Message)
 									{
-										$szMessage = current($ResponseDocument->$ResponseMethod->$szGatewayOutputXMLPath->Message[0]);
+										//$szMessage = current($ResponseDocument->$ResponseMethod->$szGatewayOutputXMLPath->Message[0]);
+										//New code 11-3-2014
+										$szMessage = $ResponseDocument->$ResponseMethod->$szGatewayOutputXMLPath->Message[0];
+										$szMessage = "{$szMessage}"; 
+										//New code 11-3-2014
+
 									}
 									if ($ResponseDocument->$ResponseMethod->$szGatewayOutputXMLPath->ErrorMessages)
 									{
@@ -2127,7 +2137,11 @@
 									
 									if ($ResponseDocument->$ResponseMethod->$szGatewayOutputXMLPath->PassOutData)
 									{
-										$szPassOutData = current($ResponseDocument->$ResponseMethod->$szGatewayOutputXMLPath->PassOutData[0]);
+										//$szPassOutData = current($ResponseDocument->$ResponseMethod->$szGatewayOutputXMLPath->PassOutData[0]);
+										//New code 11-3-2014
+										$szPassOutData = $ResponseDocument->$ResponseMethod->$szGatewayOutputXMLPath->PassOutData[0];
+										$szPassOutData = "{$szMessage}";
+										//New code 11-3-2014
 									}
 									else 
 									{
@@ -2154,7 +2168,7 @@
 										$ptdPreviousTransactionResult = new PreviousTransactionResult($nPreviousStatusCode, $szPreviousMessage);		
 									}
 									
-									$goGatewayOutput = new GatewayOutput($nStatusCode, $szMessage, $szPassOutData, $boAuthorisationAttempted, $ptdPreviousTransactionResult, $lszErrorMessages);
+									$goGatewayOutput = new GatewayOutput($nStatusCode, $szMessage, $szPassOutData, $boAuthorisationAttempted, $ptdPreviousTransactionResult, $lszErrorMessages);	
 		                                
 		                            // look to see if there are any gateway entry points
 		                            $nCount = 0;
