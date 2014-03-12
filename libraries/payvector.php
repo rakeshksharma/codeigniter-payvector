@@ -14,9 +14,11 @@
 
 
   class Payvector {
+  
+	var $debug  = false; // seted for debug mode on set it true for debug
 	
 	function __construct() {
-		require_once ("ThePaymentGateway/PaymentSystem.php");
+		
 	}
 
 	/**
@@ -28,6 +30,7 @@
 			$SiteSecureBaseURL = $customer['site_url'];
 		    
 			$PaymentProcessorDomain = $customer['entry_point'];
+			//$PaymentProcessorDomain = "payvector.net";
 			// This is the port that the gateway communicates on
 			$PaymentProcessorPort = 443;
 		
@@ -39,7 +42,11 @@
 			{
 				$PaymentProcessorFullDomain = $PaymentProcessorDomain.":".$PaymentProcessorPort."/";
 			}
+			
+			require_once ("ThePaymentGateway/PaymentSystem.php");
+			
 			$rgeplRequestGatewayEntryPointList = new RequestGatewayEntryPointList();
+			
 			// you need to put the correct gateway entry point urls in here
 			// contact support to get the correct urls
 		
@@ -95,8 +102,8 @@
 		
 			$cdtCardDetailsTransaction = new CardDetailsTransaction($rgeplRequestGatewayEntryPointList, 1, null, $mdMerchantDetails, $tdTransactionDetails, $cdCardDetails, $cdCustomerDetails, "Some data to be passed out");
 			
-			$boTransactionProcessed = $cdtCardDetailsTransaction->processTransaction($goGatewayOutput, $tomTransactionOutputMessage);
-		
+			$boTransactionProcessed = $cdtCardDetailsTransaction->processTransaction($goGatewayOutput, $tomTransactionOutputMessage);			
+			
 			if ($boTransactionProcessed == false)
 			{
 				// could not communicate with the payment gateway 
@@ -110,9 +117,16 @@
 				// status code of 5 - means transaction declined 
 				// status code of 20 - means duplicate transaction 
 				// status code of 30 - means an error occurred 
-				// remain unhandled status code  
-				//echo '<pre>';print_r($goGatewayOutput); 
-				return $goGatewayOutput->getStatusCode();
+				// remain unhandled status code				
+				$return = array(
+					"StatusCode"=> $goGatewayOutput->getStatusCode(),
+					"Message"=> $goGatewayOutput->getMessage()
+					);
+				if($this->debug){
+					echo '<pre>';print_r($return); die('DEBUGE IS ACTIVE');
+				}else{
+					return $goGatewayOutput->getStatusCode();
+				}
 				
 			}
 		}
